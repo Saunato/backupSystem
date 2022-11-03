@@ -15,7 +15,9 @@ function App() {
   const [mode, setMode] = useState(
     store.getState().persistTheme ? (store.getState().persistTheme as any).mode : 'light'
   )
-
+  // const [isLogin, setIsLogin] = useState(
+  //   (store.getState().persistIsLogin as any) === 'true' ? true : false
+  // );
 
   const toggleTheme = useMemo(
     () => ({

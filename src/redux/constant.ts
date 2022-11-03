@@ -4,10 +4,14 @@
 
 export const THEME = 'Theme'
 export const SELECTPANEL = 'SelectPanel'
+export const ISLOGIN = 'IsLogin'
 
 export const themeConfig = {
   key: 'persistTheme'
 }
 export const selectPanelConfig = {
   key: 'persistSelectPanel'
+}
+export const isLoginConfig = {
+  key: 'persistIsLogin'
 }

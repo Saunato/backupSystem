@@ -3,13 +3,13 @@ import Pages from '../page';
 export const routeConfig = [
   {
     key: '/',
-    title: 'home',
-    page: Pages.Home
+    title: 'login',
+    page: Pages.Login
   },
   {
-    key: '/home',
-    title: 'home',
-    page: Pages.Home
+    key: '/login',
+    title: 'login',
+    page: Pages.Login
   },
   {
     key: '/example',

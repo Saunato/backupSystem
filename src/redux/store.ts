@@ -12,13 +12,15 @@ import { persist } from './reduxPersist';
 // 引入 自定义reducer
 import { themeReducer } from './theme/theme_reducer';
 import { selectPanelReducer } from './selectPanel/selectPanel_reducer';
+import { isLoginReducer } from './isLogin/isLogin_reducer';
 
 // 引入 自定义key (localstorage index)
-import { themeConfig, selectPanelConfig } from './constant'
+import { themeConfig, selectPanelConfig, isLoginConfig } from './constant'
 
 const appReducer = combineReducers({
   persistTheme: persist(themeConfig, themeReducer),
-  persistSelectPanel: persist(selectPanelConfig, selectPanelReducer)
+  persistSelectPanel: persist(selectPanelConfig, selectPanelReducer),
+  persistIsLogin: persist(isLoginConfig, isLoginReducer)
 })
 
 const store =  createStore(

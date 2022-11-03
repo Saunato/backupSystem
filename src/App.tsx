@@ -15,9 +15,12 @@ function App() {
   const [mode, setMode] = useState(
     store.getState().persistTheme ? (store.getState().persistTheme as any).mode : 'light'
   )
-  // const [isLogin, setIsLogin] = useState(
-  //   (store.getState().persistIsLogin as any) === 'true' ? true : false
-  // );
+  const [isLogin, setIsLogin] = useState(
+    (store.getState().persistIsLogin as any).mode === 'true' ? true : false
+  );
+  store.subscribe(() => {
+    setIsLogin((store.getState().persistIsLogin as any).mode === 'true' ? true : false)
+  })
 
   const toggleTheme = useMemo(
     () => ({
@@ -47,7 +50,7 @@ function App() {
     <div>
       <ToggleThemeContext.Provider value={toggleTheme}>
         <ThemeProvider theme={theme}>
-          <Header/>
+          {isLogin && <Header/>}
           <Container className="app-container" maxWidth="lg">
             <Routes />
           </Container>

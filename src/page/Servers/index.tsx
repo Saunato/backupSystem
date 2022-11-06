@@ -5,12 +5,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 
-export default function BatchPredict() {
+export default function Servers() {
   const history = useHistory();
   (store.getState().persistIsLogin as any).mode !== 'true' && history.replace('/');
+
   return (
     <Box sx={{ p: 3 }}>
-      <Typography>BatchPredict</Typography>
+      <Typography>Servers</Typography>
     </Box>
   );
 }

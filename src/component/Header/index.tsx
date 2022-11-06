@@ -7,14 +7,14 @@ import Toolbar from "@mui/material/Toolbar";
 import CssBaseline from "@mui/material/CssBaseline";
 
 
-export default function HideAppBar() {
+export default function HideAppBar(props: {logout: () => void, selectPanel: string}) {
   return (
     <React.Fragment>
       <CssBaseline />
         <AppBar>
           <Toolbar>
-            <HeaderItemBar />
-            <HeaderFuncTab />
+            <HeaderItemBar selectPanel={props.selectPanel}/>
+            <HeaderFuncTab logout={props.logout}/>
           </Toolbar>
         </AppBar>
       <Toolbar />

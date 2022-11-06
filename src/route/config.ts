@@ -12,18 +12,18 @@ export const routeConfig = [
     page: Pages.Login
   },
   {
-    key: '/example',
-    title: 'example',
-    page: Pages.Example
+    key: '/servers',
+    title: 'servers',
+    page: Pages.Servers
   },
   {
-    key: '/singlepredict',
-    title: 'singlepredict',
-    page: Pages.SinglePredict
+    key: '/backupFiles',
+    title: 'backupFiles',
+    page: Pages.BackupFiles
   },
   {
-    key: '/batchpredict',
-    title: 'batchpredict',
-    page: Pages.BatchPredict
+    key: '/tracing',
+    title: 'tracing',
+    page: Pages.Tracing
   }
 ]

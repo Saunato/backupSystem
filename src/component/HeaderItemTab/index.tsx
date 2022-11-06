@@ -8,8 +8,8 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 
-export default function HeaderItemBar() {
-  const [value, setValue] = useState('');
+export default function HeaderItemBar(props: {selectPanel: string}) {
+  const [value, setValue] = useState(props.selectPanel || '');
   const history = useHistory();
 
   // set nav tab
@@ -20,6 +20,7 @@ export default function HeaderItemBar() {
   // set selectPanel to redux-persist
   useMemo(
     () => {
+      console.log('123123', value)
       store.dispatch(createSelectPanelAction(value))
     },
     [value]
@@ -33,9 +34,9 @@ export default function HeaderItemBar() {
         textColor="inherit"
         indicatorColor="primary"
       >
-        <Tab onClick={() => history.push('/example')} value="example" label="example" />
-        <Tab onClick={() => history.push('/singlepredict')} value="singlepredict" label="singlepredict" />
-        <Tab onClick={() => history.push('/batchpredict')} value="batchpredict" label="batchpredict" />
+        <Tab onClick={() => history.push('/servers')} value="servers" label="servers" />
+        <Tab onClick={() => history.push('/backupFiles')} value="backupFiles" label="backupFiles" />
+        <Tab onClick={() => history.push('/tracing')} value="tracing" label="tracing" />
       </Tabs>
     </Box>
   );

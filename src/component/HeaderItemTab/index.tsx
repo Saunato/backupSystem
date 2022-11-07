@@ -20,8 +20,7 @@ export default function HeaderItemBar(props: {selectPanel: string}) {
   // set selectPanel to redux-persist
   useEffect(
     () => {
-      const _value = value === 'ogi' ? 'login' : value
-      store.dispatch(createSelectPanelAction(_value))
+      store.dispatch(createSelectPanelAction(value))
     },
     [value]
   );

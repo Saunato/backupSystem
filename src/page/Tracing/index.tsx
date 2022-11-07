@@ -5,12 +5,12 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 
-export default function SinglePredict() {
+export default function Tracing() {
   const history = useHistory();
   (store.getState().persistIsLogin as any).mode !== 'true' && history.replace('/');
   return (
     <Box sx={{ p: 3 }}>
-      <Typography>SinglePredict</Typography>
+      <Typography>Tracing</Typography>
     </Box>
   );
 }

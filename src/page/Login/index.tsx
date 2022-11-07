@@ -23,7 +23,9 @@ export default function Home() {
   useMemo(
     () => {
       store.dispatch(createIsLoginAction(isLogin + ''))
-      isLogin && history.push('/example')
+      let lastRoute = store.getState().persistSelectPanel ? (store.getState().persistSelectPanel as any).selectPanel : ''
+      // console.log('/' + (lastRoute.length ? lastRoute : 'servers'))
+      isLogin && history.push('/' + (lastRoute.length ? lastRoute : 'servers'))
     },
     [isLogin, history]
   );

@@ -5,13 +5,12 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 
-export default function Example() {
+export default function BackupFiles() {
   const history = useHistory();
   (store.getState().persistIsLogin as any).mode !== 'true' && history.replace('/');
-
   return (
     <Box sx={{ p: 3 }}>
-      <Typography>example</Typography>
+      <Typography>BackupFiles</Typography>
     </Box>
   );
 }

@@ -4,7 +4,7 @@ const initMode: object = {
   selectPanel: (
     window.localStorage.getItem('persist:persistSelectPanel') && JSON.parse(window.localStorage.getItem('persist:persistSelectPanel') as any).selectPanel
     ? JSON.parse(window.localStorage.getItem('persist:persistSelectPanel') as any).selectPanel
-    : 'home'
+    : 'login'
   )
 }
 

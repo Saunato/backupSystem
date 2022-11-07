@@ -6,9 +6,10 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
-const HeaderFuncTab: React.FC = () => {
+export default function HeaderFuncTab(props: {logout: () => void}) {
   
   const theme = useTheme();
   const colorMode = useContext(ToggleThemeContext);
@@ -27,6 +28,13 @@ const HeaderFuncTab: React.FC = () => {
     >
       <IconButton
         sx={{ ml: 1 }}
+        onClick={props.logout}
+        color="inherit"
+      >
+          <LogoutIcon />
+      </IconButton>
+      <IconButton
+        sx={{ ml: 1 }}
         onClick={colorMode.toggleTheme}
         color="inherit"
       >
@@ -40,4 +48,3 @@ const HeaderFuncTab: React.FC = () => {
   );
 };
 
-export default HeaderFuncTab;

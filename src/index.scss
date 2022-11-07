@@ -9,24 +9,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  &::before {
-    content: "";
-    background: url(assets/triangle-bg.png);
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0.25;
-    z-index: -1;
-  }
-}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -36,4 +18,21 @@ code {
 .app-container {
   max-width: 100% !important;
   padding: 24px !important;
+  &::after {
+    content: "";
+    background: url(assets/triangle-bg.png);
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgb(107, 152, 219);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.25;
+    z-index: -1;
+  }
 }

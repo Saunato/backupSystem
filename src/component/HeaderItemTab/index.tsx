@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useHistory  } from 'react-router-dom';
 import store from '../../redux/store';
 import { createSelectPanelAction } from '../../redux/selectPanel/selectPanel_action';
@@ -18,10 +18,10 @@ export default function HeaderItemBar(props: {selectPanel: string}) {
   };
 
   // set selectPanel to redux-persist
-  useMemo(
+  useEffect(
     () => {
-      console.log('123123', value)
-      store.dispatch(createSelectPanelAction(value))
+      const _value = value === 'ogi' ? 'login' : value
+      store.dispatch(createSelectPanelAction(_value))
     },
     [value]
   );

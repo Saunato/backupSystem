@@ -25,6 +25,7 @@ function App() {
 
   store.subscribe(() => {
     setIsLogin((store.getState().persistIsLogin as any).mode === 'true' ? true : false)
+    setSelectPanel((store.getState().persistSelectPanel as any).selectPanel)
   })
 
   const toggleTheme = useMemo(

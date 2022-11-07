@@ -15,10 +15,10 @@ export default function Home() {
     () => {
       store.dispatch(createIsLoginAction(isLogin + ''))
       let lastRoute = store.getState().persistSelectPanel ? (store.getState().persistSelectPanel as any).selectPanel : ''
-      console.log('/' + (lastRoute.length ? lastRoute : 'servers'))
+      // console.log('/' + (lastRoute.length ? lastRoute : 'servers'))
       isLogin && history.push('/' + (lastRoute.length ? lastRoute : 'servers'))
     },
-    [isLogin]
+    [isLogin, history]
   );
 
   const handleOk = () => {

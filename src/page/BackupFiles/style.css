@@ -1,0 +1,22 @@
+.backup-files-container {
+  height: 100%;
+  width: 100%;
+  padding: 0px 50px;
+}
+
+.backup-files {
+  width: 100%;
+  min-height: 80vh;
+}
+
+.backup-file-block {
+  position: relative;
+  overflow: hidden;
+  margin: 24px 40px;
+}
+
+.backup-files-pagination {
+  display: inline-block;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}

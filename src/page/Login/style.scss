@@ -1,39 +1,5 @@
-* {
-    box-sizing: border-box;
-}
-body {
-    font-family: 'Montserrat',sans-serif;
-    background-image: linear-gradient(120deg,#3498db,#8e44ad);;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: -20px 0 50px;
-}
-
-h1 {
-    font-weight: bold;
-    margin: 0;
-}
-p {
-    font-size: 14px;
-    line-height: 20px;
-    letter-spacing: .5px;
-    margin: 20px 0 30px;
-}
-span {
-    font-size: 12px;
-}
-a {
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-    margin: 15px 0;
-}
 .container {
     background: #fff;
-    // border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0, 0, 0, .25), 0 10px 10px rgba(0, 0, 0, .22);
     position: relative;
     overflow: hidden;

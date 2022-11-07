@@ -61,7 +61,7 @@ function App() {
       <ToggleThemeContext.Provider value={toggleTheme}>
         <ThemeProvider theme={theme}>
           {isLogin && <Header logout={logout} selectPanel={selectPanel}/>}
-          <Container className="app-container" maxWidth="lg">
+          <Container className="app-container">
             <Routes />
           </Container>
         </ThemeProvider>

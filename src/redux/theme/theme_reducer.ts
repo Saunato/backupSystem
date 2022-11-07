@@ -2,7 +2,7 @@ import {THEME} from '../constant'
 
 const initMode: object = {
   mode: (
-    window.localStorage.getItem('persist:persistTheme') && JSON.parse(window.localStorage.getItem('persist:persistTheme') as any).mode == '"dark"'
+    window.localStorage.getItem('persist:persistTheme') && JSON.parse(window.localStorage.getItem('persist:persistTheme') as any).mode === '"dark"'
     ? 'dark'
     : 'light'
   )

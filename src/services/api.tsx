@@ -1,5 +1,23 @@
 import serviceAxios from './index';
 
+// 登录
+export const login = (data: any) => {
+  return serviceAxios({
+    url: "/user/login",
+    method: "post",
+    data,
+  });
+}
+
+// 注册
+export const signOn = (data: any) => {
+  return serviceAxios({
+    url: "/user/register",
+    method: "post",
+    data,
+  });
+}
+
 // 获取服务器列表
 export const getServers = (data: any) => {
   return serviceAxios({

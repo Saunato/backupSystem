@@ -305,7 +305,7 @@ export default function Servers() {
     }
   ];
 
-  const paginationProps = {
+  const paginationProps: any = {
     current: pageNum, //当前页码
     pageSize, // 每页数据条数
     // showTotal: () => (
@@ -315,6 +315,7 @@ export default function Servers() {
     onChange: (page: any) => handlePageChange(page), //改变页码的函数
     hideOnSinglePage: false,
     showSizeChanger: false,
+    position: ['bottomCenter']
   };
 
   // 改变页码的回调 page代表页码数 pageSize代表每页条数
@@ -345,7 +346,10 @@ export default function Servers() {
 
   return (
     <>
-      <Button style={{marginBottom: '10px'}} type="primary" onClick={() => { setIsAddVisible(true) }} icon={<PlusOutlined />}>新增服务器</Button>
+      {/* <Button style={{marginBottom: '10px'}} type="primary" onClick={() => { setIsAddVisible(true) }} icon={<PlusOutlined />}>新增服务器</Button> */}
+      <div className="backup-file-add">
+        <PlusOutlined style={{display: "inline-block", marginLeft: "50%", transform: "translateX(-50%)"}} onClick={() => { setIsAddVisible(true) }}/>
+      </div>
       <Drawer
         title="新增服务器"
         placement="right"

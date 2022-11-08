@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import store from "../../redux/store";
 import { Badge, Descriptions, Pagination, Card, Drawer, Button, Dropdown, Space, Typography, List } from "antd";
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import "./style.css";
 
 const res = {
@@ -305,6 +305,9 @@ export default function BackupFiles() {
 
   return (
     <div className="backup-files-container">
+      <div className="backup-file-add">
+        <PlusOutlined style={{display: "inline-block", marginLeft: "50%", transform: "translateX(-50%)"}}/>
+      </div>
       <div className="backup-files">{result.map(renderBlock)}</div>
       <div className="backup-files-pagination">
         <Pagination defaultCurrent={1} total={10} pageSize={4} />

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { resolve } from "path";
 
 // 创建axios请求实例
 const serviceAxios = axios.create({

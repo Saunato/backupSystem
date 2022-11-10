@@ -6,10 +6,9 @@
 
 .backup-file-add{
   margin: 10px 40px 0px;
-  transition: background .5s ease, font-size .5s ease, color .5s ease;
+  transition: all .5s ease;
   font-size: 2rem;
   color: rgb(160, 160, 160);
-  /* padding: 10px; */
 }
 
 .backup-file-add:hover {
@@ -17,6 +16,15 @@
   color: rgb(79, 116, 171);
   background: rgba(255, 255, 255, 0.35);
   font-size: 3rem;
+}
+
+.backup-file-add.active{
+  height: 100%;
+  background: transparent;
+  font-size: 1rem;
+  padding: 0px;
+  margin: 0px;
+  /* overflow: hidden; */
 }
 
 .backup-files {

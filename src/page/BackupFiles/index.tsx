@@ -105,6 +105,21 @@ const availableServers = [
   }
 ]
 
+const template = {
+  id: 0,
+  userId: 0,
+  sourceServerId: 0,
+  sourceServerAddress: "sourceServerAddress",
+  sourcePath: "sourcePath",
+  fileName: "fileName",
+  mode: 2,
+  startTime: "1970-1-1",
+  frequency: "-1",
+  settingId: 0,
+  status: 2,
+  targetServer: []
+}
+
 const { Search } = Input;
 
 export default function BackupFiles() {
@@ -112,8 +127,9 @@ export default function BackupFiles() {
   const [open, setOpen] = useState(-1);
   const [openModal, setOpenModal] = useState(-1);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [adding, setAdding] = useState(false);
   const [result, setResult] = useState(res.data);
-
+  const [newBlockData, setNewBlockData] = useState(template);
 
   (store.getState().persistIsLogin as any).mode !== "true" &&
     history.replace("/");
@@ -179,7 +195,7 @@ export default function BackupFiles() {
 
   // 修改备用服务器
   const handelSubmit = (txt: any, id: number) => {
-    console.log(txt, id)
+    // console.log(txt, id)
     const newRes = result.map((item, idx) => {
       if (idx !== open) return item
       const _newTargetServers: any = item.targetServer.map(_it => {
@@ -194,7 +210,7 @@ export default function BackupFiles() {
   }
 
   // 备份频率
-  const lepusGetBackupFrequency = (frequency: string, id: number) => {
+  const lepusGetBackupFrequency = (type: number, frequency: string, id: number) => {
     const frequencyMap: any = {
       "0": "每年",
       "1": "每月",
@@ -231,7 +247,7 @@ export default function BackupFiles() {
           items,
           selectable: true,
           defaultSelectedKeys: [frequency],
-          onClick: (e) => setBackupFrequency(e, id)
+          onClick: (e) => setBackupFrequency(type , e, id)
         }}
       >
         <Typography.Link>
@@ -245,8 +261,13 @@ export default function BackupFiles() {
   }
 
   // 修改备份频率
-  const setBackupFrequency = (e: any, id:number) => {
+  const setBackupFrequency = (type: number, e: any, id:number) => {
     const key = e.key
+    if (type) {
+      const _newBlockData = JSON.parse(JSON.stringify(newBlockData))
+      _newBlockData.frequency = key
+      setNewBlockData(_newBlockData)
+    }
     const newRes = result.map(item => {
       if (item.id !== id) return item
       item.frequency = key
@@ -275,7 +296,7 @@ export default function BackupFiles() {
   }
 
   // 备份模式
-  const lepusGetBackupMode = (mode: number, id: number) => {
+  const lepusGetBackupMode = (type: number, mode: number, id: number) => {
     const items: any = [
       {
         key: '0',
@@ -292,12 +313,12 @@ export default function BackupFiles() {
           items,
           selectable: true,
           defaultSelectedKeys: [String(mode)],
-          onClick: (e) => setBackupMode(e, id)
+          onClick: (e) => setBackupMode(type, e, id)
         }}
       >
         <Typography.Link>
           <Space>
-            {mode === 0 ? "自动" : "手动"}
+            {mode == 0 ? "自动" : "手动"}
             <DownOutlined />
           </Space>
         </Typography.Link>
@@ -306,14 +327,26 @@ export default function BackupFiles() {
   }
 
   // 修改备份模式
-  const setBackupMode = (e: any, id: number) => {
+  const setBackupMode = (type: number, e: any, id: number) => {
     const key = e.key
+    if (type) {
+      const _newBlockData = JSON.parse(JSON.stringify(newBlockData))
+      _newBlockData.mode = key
+      console.log(_newBlockData)
+      setNewBlockData(_newBlockData)
+    }
     const newRes = result.map(item => {
       if (item.id !== id) return item
-      item.mode = key * 1
+      item.mode = key
       return item
     })
     setResult(newRes)
+  }
+
+  // 获取当前日期字符串
+  const lepusGetNow = () => {
+    let dateNow = new Date()
+    return dateNow.toLocaleDateString().split('/').join('-')
   }
 
   // 可用备份服务器
@@ -365,23 +398,20 @@ export default function BackupFiles() {
               {data.sourcePath || "sourceServerPath"}
             </Descriptions.Item>
             <Descriptions.Item label="备份模式">
-              {lepusGetBackupMode(data.mode, data.id)}
+              {lepusGetBackupMode(0, data.mode, data.id)}
             </Descriptions.Item>
             <Descriptions.Item label="备份频率">
-              {lepusGetBackupFrequency(data.frequency || "-1", data.id)}
+              {lepusGetBackupFrequency(0, data.frequency || "-1", data.id)}
             </Descriptions.Item>
             <Descriptions.Item label="备份时间">
               {data.startTime || "2023-06-20"}
             </Descriptions.Item>
             <Descriptions.Item label="备份状态" span={3}>
-              {lepusGetBackupStatus(data.status || 1)}
+              {lepusGetBackupStatus(data.status)}
             </Descriptions.Item>
             <Descriptions.Item label="目标服务器">
               <Button type="link" onClick={() => showDrawer(idx)}>
                 查看详情
-              </Button>
-              <Button type="text" onClick={() => showModal(idx)}>
-                可用服务器列表
               </Button>
             </Descriptions.Item>
           </Descriptions>
@@ -399,11 +429,115 @@ export default function BackupFiles() {
       </div>
     );
   };
+  
+  const renderNewBlock = (id: number) => {
+    return (
+      <Card
+        title={<p style={{margin: 0}}>备份文件：<p style={{fontWeight: 700, margin: 0, display: "inline-block"}}>
+          <Search
+            enterButton={<Button type="dashed">完成</Button>}
+            size="small"
+            onSearch={(txt) => handleNewBlockSubmit("fileName", txt, id)}
+            style={{"width": "70%", fontWeight: 700, fontSize: "1.5rem"}}
+            defaultValue="fileName"
+            bordered={false}
+          />
+          </p></p>}
+        bordered={false}
+        style={{ width: "100%", display: "inline-block" }}
+      >
+        <Descriptions
+          bordered
+          contentStyle={{ background: "white", maxWidth: "400px" }}
+          column={3}
+        >
+          <Descriptions.Item label="id">{id || "id"}</Descriptions.Item>
+          <Descriptions.Item label="源服务器id">
+            <Search
+              enterButton={<Button type="dashed">完成</Button>}
+              size="small"
+              onSearch={(txt) => handleNewBlockSubmit("sourceServerId", txt, id)}
+              style={{"width": "70%"}}
+              defaultValue="sourceServerId"
+              bordered={false}
+            />
+          </Descriptions.Item>
+          <Descriptions.Item label="源服务器地址">
+            <Search
+              enterButton={<Button type="dashed">完成</Button>}
+              size="small"
+              onSearch={(txt) => handleNewBlockSubmit("sourceServerAddress", txt, id)}
+              style={{"width": "70%"}}
+              defaultValue="sourceServerAddress"
+              bordered={false}
+            />
+          </Descriptions.Item>
+          <Descriptions.Item label="源文件路径">
+            <Search
+              enterButton={<Button type="dashed">完成</Button>}
+              size="small"
+              onSearch={(txt) => handleNewBlockSubmit("sourceServerPath", txt, id)}
+              style={{"width": "70%"}}
+              defaultValue="sourceServerPath"
+              bordered={false}
+            />
+          </Descriptions.Item>
+          <Descriptions.Item label="备份模式">
+            {lepusGetBackupMode(1, newBlockData.mode, id)}
+          </Descriptions.Item>
+          <Descriptions.Item label="备份频率">
+            {lepusGetBackupFrequency(1, newBlockData.frequency, id)}
+          </Descriptions.Item>
+          <Descriptions.Item label="备份时间">
+            {lepusGetNow()}
+          </Descriptions.Item>
+          <Descriptions.Item label="备份状态" span={3}>
+            {lepusGetBackupStatus(2)}
+          </Descriptions.Item>
+          <Descriptions.Item label="目标服务器">
+            <Button type="text" onClick={() => showModal(1)}>
+              可用服务器列表
+            </Button>
+          </Descriptions.Item>
+        </Descriptions>
+        <div style={{marginTop: "20px", marginLeft: "50%", transform: "translateX(-15%)"}}>
+          <Button type="primary" onClick={() => submitBlock("confirm", id)} style={{display: "inline-block", marginRight: "30px"}}>
+            确认备份
+          </Button>
+          <Button type="text" onClick={() => submitBlock("cancel", id)} style={{display: "inline-block"}}>
+            暂不备份
+          </Button>
+        </div>
+      </Card>
+    )
+  }
+
+  const handleNewBlockSubmit  = (type: string, txt: any, id: number) => {
+    const _newBlockData = JSON.parse(JSON.stringify(newBlockData))
+    _newBlockData.id = id
+    _newBlockData[type] = txt
+    setNewBlockData(_newBlockData)
+  }
+
+  const addBlock = () => {
+    !adding && setAdding(true)
+  }
+
+  const submitBlock = (type: string, id: number) => {
+    const _newBlockData = JSON.parse(JSON.stringify(newBlockData))
+    if (type === "confirm") _newBlockData.status = 0
+    setResult([_newBlockData, ...result])
+    setAdding(false)
+    setNewBlockData(template)
+  }
 
   return (
     <div className="backup-files-container">
-      <div className="backup-file-add">
-        <PlusOutlined style={{display: "inline-block", marginLeft: "50%", transform: "translateX(-50%)"}}/>
+      <div className={"backup-file-add" + (adding ? " active" : "")}>
+        <PlusOutlined onClick={addBlock} style={{display: adding ? "none" : "inline-block", marginLeft: "50%", transform: "translateX(-50%)", padding: "0px 100px"}}/>
+        <div className="backup-file-block" style={{display: adding ? "" : "none", cursor: "default"}}>
+          {adding && renderNewBlock(Date.now())}
+        </div>
       </div>
       <div className="backup-files">{result.map(renderBlock)}</div>
       <Modal

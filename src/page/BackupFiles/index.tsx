@@ -1,10 +1,11 @@
 // import React from "react";
 import { useHistory } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import store from "../../redux/store";
-import { Badge, Descriptions, Pagination, Card, Drawer, Button, Dropdown, Space, Typography, List, Modal, Input } from "antd";
+import { Badge, Descriptions, Pagination, Card, Drawer, Button, Dropdown, Space, Typography, List, Modal, Input, message } from "antd";
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import "./style.css";
+import { queryFileByPage, queryAvailableServers, addBackupFile, updateBackupSetting } from '../../services/api';
 
 const res = {
   status: 0,
@@ -84,7 +85,7 @@ const res = {
   timestamp: 1667808584687,
 };
 
-const availableServers = [
+const _availableServers = [
   {
     "id": 1,
     "address": "192.168.1.3",
@@ -107,7 +108,7 @@ const availableServers = [
 
 const template = {
   id: 0,
-  userId: 0,
+  userId: 2,
   sourceServerId: 0,
   sourceServerAddress: "sourceServerAddress",
   sourcePath: "sourcePath",
@@ -115,7 +116,6 @@ const template = {
   mode: 2,
   startTime: "1970-1-1",
   frequency: "-1",
-  settingId: 0,
   status: 2,
   targetServer: []
 }
@@ -130,9 +130,43 @@ export default function BackupFiles() {
   const [adding, setAdding] = useState(false);
   const [result, setResult] = useState(res.data);
   const [newBlockData, setNewBlockData] = useState(template);
+  const [availableServers, setAvailableServers] = useState(_availableServers);
 
   (store.getState().persistIsLogin as any).mode !== "true" &&
     history.replace("/");
+
+  // 分页查询备份文件
+  useEffect(() => {
+    queryFileByPage({
+      pageNo: 1,
+      pageSize: 10,
+      userId: 2
+    }).then((res) => {
+      // console.log(res);
+      setResult(res.data.data)
+      // console.log(res.data.data);
+    }).catch((err) => {
+      message.error({
+        style: {
+          marginTop: '100px'
+        },
+        content: err
+      });
+    })
+
+    queryAvailableServers()
+      .then((res: any) => {
+        // console.log(res);
+        setAvailableServers(res.data)
+      }).catch((err) => {
+        message.error({
+          style: {
+            marginTop: '100px'
+          },
+          content: err
+        });
+      })
+  }, [])
 
   const showDrawer = (idx: number) => {
     setOpen(idx);
@@ -152,7 +186,7 @@ export default function BackupFiles() {
     setTimeout(() => {
       setOpenModal(-1);
       setConfirmLoading(false);
-    }, 2000);
+    }, 500);
   }
 
   const handleCancel = () => {
@@ -206,7 +240,26 @@ export default function BackupFiles() {
       item.targetServer = _newTargetServers
       return item
     })
-    setResult(newRes)
+    const _newRes: any = result.filter((item, idx) => idx == open)
+    const _newTargetServers: any = _newRes[0].targetServer.map((_it: any) => {
+      if (_it.id !== id) return _it
+      _it.targetPath = txt
+      _it["serverId"] = _it.id
+      return _it
+    })
+    _newRes[0].targetServer = _newTargetServers
+    console.log(JSON.stringify(_newRes[0]))
+    updateBackupSetting(_newRes[0]).then((res) => {
+      // console.log(res);
+      setResult(newRes)
+    }).catch(err => {
+      message.error({
+        style: {
+          marginTop: '100px'
+        },
+        content: err
+      });
+    })
   }
 
   // 备份频率
@@ -273,7 +326,19 @@ export default function BackupFiles() {
       item.frequency = key
       return item
     })
-    setResult(newRes)
+    const _newRes: any = result.filter(item => item.id == id)
+    _newRes[0].frequency = key
+    updateBackupSetting(_newRes[0]).then((res) => {
+      // console.log(res)
+      setResult(newRes)
+    }).catch(err => {
+      message.error({
+        style: {
+          marginTop: '100px'
+        },
+        content: err
+      });
+    })
   }
 
   // 备份状态
@@ -332,15 +397,28 @@ export default function BackupFiles() {
     if (type) {
       const _newBlockData = JSON.parse(JSON.stringify(newBlockData))
       _newBlockData.mode = key
-      console.log(_newBlockData)
+      // console.log(_newBlockData)
       setNewBlockData(_newBlockData)
+      return
     }
     const newRes = result.map(item => {
       if (item.id !== id) return item
       item.mode = key
       return item
     })
-    setResult(newRes)
+    const _newRes: any = result.filter(item => item.id == id)
+    _newRes[0].mode = key
+    updateBackupSetting(_newRes[0]).then((res) => {
+      // console.log(res)
+      setResult(newRes)
+    }).catch(err => {
+      message.error({
+        style: {
+          marginTop: '100px'
+        },
+        content: err
+      });
+    })
   }
 
   // 获取当前日期字符串
@@ -349,18 +427,21 @@ export default function BackupFiles() {
     return dateNow.toLocaleDateString().split('/').join('-')
   }
 
-  // 可用备份服务器
-  const renderTargetServers = (data: any) => {
+  // 查询可用备份服务器
+  const renderAvailableServers = (data: any) => {
     return (
       <List
         itemLayout="horizontal"
         dataSource={data}
         renderItem={(item: any) => (
-          <List.Item>
+          <List.Item onClick={() => {
+            handleNewBlockSubmit("sourceServerId", item.id)
+            submitModal()
+          }}>
             <List.Item.Meta
               title={item.address}
               description={
-                <div>
+                <div className="available-servers">
                   <p>id：{item.id}</p>
                   <p>端口号：{item.port}</p>
                   <p>城市：{item.city}</p>
@@ -439,7 +520,7 @@ export default function BackupFiles() {
             size="small"
             onSearch={(txt) => handleNewBlockSubmit("fileName", txt, id)}
             style={{"width": "70%", fontWeight: 700, fontSize: "1.5rem"}}
-            defaultValue="fileName"
+            value="fileName"
             bordered={false}
           />
           </p></p>}
@@ -458,7 +539,7 @@ export default function BackupFiles() {
               size="small"
               onSearch={(txt) => handleNewBlockSubmit("sourceServerId", txt, id)}
               style={{"width": "70%"}}
-              defaultValue="sourceServerId"
+              value={newBlockData.sourceServerId || "sourceServerId"}
               bordered={false}
             />
           </Descriptions.Item>
@@ -468,7 +549,7 @@ export default function BackupFiles() {
               size="small"
               onSearch={(txt) => handleNewBlockSubmit("sourceServerAddress", txt, id)}
               style={{"width": "70%"}}
-              defaultValue="sourceServerAddress"
+              value={newBlockData.sourceServerAddress || "sourceServerAddress"}
               bordered={false}
             />
           </Descriptions.Item>
@@ -478,7 +559,7 @@ export default function BackupFiles() {
               size="small"
               onSearch={(txt) => handleNewBlockSubmit("sourceServerPath", txt, id)}
               style={{"width": "70%"}}
-              defaultValue="sourceServerPath"
+              value={newBlockData.sourcePath || "sourcePath"}
               bordered={false}
             />
           </Descriptions.Item>
@@ -512,10 +593,11 @@ export default function BackupFiles() {
     )
   }
 
-  const handleNewBlockSubmit  = (type: string, txt: any, id: number) => {
+  const handleNewBlockSubmit  = (type: string, txt: any, id?: number) => {
     const _newBlockData = JSON.parse(JSON.stringify(newBlockData))
-    _newBlockData.id = id
+    if(id) _newBlockData.id = id
     _newBlockData[type] = txt
+    // console.log(_newBlockData)
     setNewBlockData(_newBlockData)
   }
 
@@ -526,9 +608,19 @@ export default function BackupFiles() {
   const submitBlock = (type: string, id: number) => {
     const _newBlockData = JSON.parse(JSON.stringify(newBlockData))
     if (type === "confirm") _newBlockData.status = 0
-    setResult([_newBlockData, ...result])
+    addBackupFile(_newBlockData)
+      .then((res) => {
+        setResult([_newBlockData, ...result])
+        setNewBlockData(template)
+      }).catch((err) => {
+        message.error({
+          style: {
+            marginTop: '100px'
+          },
+          content: err
+        });
+      })
     setAdding(false)
-    setNewBlockData(template)
   }
 
   return (
@@ -547,7 +639,7 @@ export default function BackupFiles() {
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        {renderTargetServers(availableServers)}
+        {renderAvailableServers(availableServers)}
       </Modal>
       <div className="backup-files-pagination">
         <Pagination defaultCurrent={1} total={10} pageSize={4} />

@@ -43,3 +43,13 @@
   margin-left: 50%;
   transform: translateX(-50%);
 }
+
+.available-servers {
+  padding: 10px 5px 1px;
+  transition: all .3s ease;
+}
+
+.available-servers:hover {
+  background: rgba(105, 104, 104, 0.35);
+  cursor: pointer;
+}

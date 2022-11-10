@@ -53,3 +53,47 @@ export const addServer = (data: any) => {
     data,
   });
 }
+
+// 新增备份文件
+export const addBackupFile = (data: any) => {
+  return serviceAxios({
+    url: "/file/add",
+    method: "post",
+    data,
+  });
+}
+
+// 查询可备份服务器
+export const queryAvailableServers = () => {
+  return serviceAxios({
+    url: "/file/queryAvailableServers",
+    method: "post",
+  });
+}
+
+// 修改备份设置
+export const updateBackupSetting = (data: any) => {
+  return serviceAxios({
+    url: "/setting/update",
+    method: "post",
+    data,
+  });
+}
+
+// 修改备份文件状态
+export const updateBackupFileStatus = (data: any) => {
+  return serviceAxios({
+    url: "/file/updateStatus",
+    method: "post",
+    data,
+  });
+}
+
+// 分页查询备份文件
+export const queryFileByPage = (data: any) => {
+  return serviceAxios({
+    url: "/file/query",
+    method: "post",
+    data,
+  });
+}

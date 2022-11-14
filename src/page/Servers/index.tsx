@@ -346,10 +346,7 @@ export default function Servers() {
 
   return (
     <>
-      {/* <Button style={{marginBottom: '10px'}} type="primary" onClick={() => { setIsAddVisible(true) }} icon={<PlusOutlined />}>新增服务器</Button> */}
-      <div className="backup-file-add">
-        <PlusOutlined style={{display: "inline-block", marginLeft: "50%", transform: "translateX(-50%)"}} onClick={() => { setIsAddVisible(true) }}/>
-      </div>
+      <Button style={{marginBottom: '10px'}} type="primary" onClick={() => { setIsAddVisible(true) }} icon={<PlusOutlined />}>新增服务器</Button>
       <Drawer
         title="新增服务器"
         placement="right"

@@ -97,3 +97,12 @@ export const queryFileByPage = (data: any) => {
     data,
   });
 }
+
+// 文件追溯
+export const log = (data: any) => {
+  return serviceAxios({
+    url: "/log/query",
+    method: "post",
+    data,
+  });
+}

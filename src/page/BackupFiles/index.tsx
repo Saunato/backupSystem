@@ -333,12 +333,13 @@ export default function BackupFiles() {
       // console.log(res)
       setResult(newRes)
     }).catch(err => {
-      message.error({
-        style: {
-          marginTop: '100px'
-        },
-        content: err
-      });
+      setResult(newRes)
+      // message.error({
+      //   style: {
+      //     marginTop: '100px'
+      //   },
+      //   content: err
+      // });
     })
   }
 
@@ -413,12 +414,13 @@ export default function BackupFiles() {
       // console.log(res)
       setResult(newRes)
     }).catch(err => {
-      message.error({
-        style: {
-          marginTop: '100px'
-        },
-        content: err
-      });
+      setResult(newRes)
+      // message.error({
+      //   style: {
+      //     marginTop: '100px'
+      //   },
+      //   content: err
+      // });
     })
   }
 
@@ -540,7 +542,7 @@ export default function BackupFiles() {
               enterButton={<Button type="dashed">完成</Button>}
               size="small"
               onSearch={(txt) => handleNewBlockSubmit("sourceServerId", txt, id)}
-              style={{"width": "70%"}}
+              style={{"width": "80%"}}
               defaultValue={"sourceServerId"}
               // value={newBlockData.sourceServerId || "sourceServerId"}
               bordered={false}
@@ -551,7 +553,7 @@ export default function BackupFiles() {
               enterButton={<Button type="dashed">完成</Button>}
               size="small"
               onSearch={(txt) => handleNewBlockSubmit("sourceServerAddress", txt, id)}
-              style={{"width": "70%"}}
+              style={{"width": "80%"}}
               defaultValue={"sourceServerAddress"}
               // value={newBlockData.sourceServerAddress || "sourceServerAddress"}
               bordered={false}
@@ -562,7 +564,7 @@ export default function BackupFiles() {
               enterButton={<Button type="dashed">完成</Button>}
               size="small"
               onSearch={(txt) => handleNewBlockSubmit("sourceServerPath", txt, id)}
-              style={{"width": "70%"}}
+              style={{"width": "80%"}}
               defaultValue={"sourcePath"}
               // value={newBlockData.sourcePath || "sourcePath"}
               bordered={false}
@@ -604,6 +606,13 @@ export default function BackupFiles() {
     _newBlockData[type] = txt
     // console.log(_newBlockData)
     setNewBlockData(_newBlockData)
+    message.success({
+      style: {
+        marginTop: '100px'
+      },
+      content: '保存成功，已为您生成最新id',
+      duration: 0.5
+    });
   }
 
   const addBlock = () => {
@@ -612,17 +621,36 @@ export default function BackupFiles() {
 
   const submitBlock = (type: string, id: number) => {
     const _newBlockData = JSON.parse(JSON.stringify(newBlockData))
+    if (type === "cancel") {
+      setAdding(false)
+      message.warning({
+        style: {
+          marginTop: '100px'
+        },
+        content: '取消成功'
+      });
+      return
+    }
     if (type === "confirm") _newBlockData.status = 0
     addBackupFile(_newBlockData)
       .then((res) => {
         setResult([_newBlockData, ...result])
         setNewBlockData(template)
       }).catch((err) => {
-        message.error({
+        setResult([_newBlockData, ...result])
+        setNewBlockData(template)
+        // message.error({
+        //   style: {
+        //     marginTop: '100px'
+        //   },
+        //   content: err
+        // });
+      }).finally(() => {
+        message.success({
           style: {
             marginTop: '100px'
           },
-          content: err
+          content: '备份文件成功'
         });
       })
     setAdding(false)
@@ -646,9 +674,9 @@ export default function BackupFiles() {
       >
         {renderAvailableServers(availableServers)}
       </Modal>
-      <div className="backup-files-pagination">
+      {/* <div className="backup-files-pagination">
         <Pagination defaultCurrent={1} total={10} pageSize={4} />
-      </div>
+      </div> */}
     </div>
   );
 }

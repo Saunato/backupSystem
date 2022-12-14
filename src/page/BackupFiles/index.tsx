@@ -320,6 +320,7 @@ export default function BackupFiles() {
       const _newBlockData = JSON.parse(JSON.stringify(newBlockData))
       _newBlockData.frequency = key
       setNewBlockData(_newBlockData)
+      return
     }
     const newRes = result.map(item => {
       if (item.id !== id) return item
@@ -520,7 +521,8 @@ export default function BackupFiles() {
             size="small"
             onSearch={(txt) => handleNewBlockSubmit("fileName", txt, id)}
             style={{"width": "70%", fontWeight: 700, fontSize: "1.5rem"}}
-            value="fileName"
+            defaultValue={"fileName"}
+            // value="fileName"
             bordered={false}
           />
           </p></p>}
@@ -539,7 +541,8 @@ export default function BackupFiles() {
               size="small"
               onSearch={(txt) => handleNewBlockSubmit("sourceServerId", txt, id)}
               style={{"width": "70%"}}
-              value={newBlockData.sourceServerId || "sourceServerId"}
+              defaultValue={"sourceServerId"}
+              // value={newBlockData.sourceServerId || "sourceServerId"}
               bordered={false}
             />
           </Descriptions.Item>
@@ -549,7 +552,8 @@ export default function BackupFiles() {
               size="small"
               onSearch={(txt) => handleNewBlockSubmit("sourceServerAddress", txt, id)}
               style={{"width": "70%"}}
-              value={newBlockData.sourceServerAddress || "sourceServerAddress"}
+              defaultValue={"sourceServerAddress"}
+              // value={newBlockData.sourceServerAddress || "sourceServerAddress"}
               bordered={false}
             />
           </Descriptions.Item>
@@ -559,7 +563,8 @@ export default function BackupFiles() {
               size="small"
               onSearch={(txt) => handleNewBlockSubmit("sourceServerPath", txt, id)}
               style={{"width": "70%"}}
-              value={newBlockData.sourcePath || "sourcePath"}
+              defaultValue={"sourcePath"}
+              // value={newBlockData.sourcePath || "sourcePath"}
               bordered={false}
             />
           </Descriptions.Item>
